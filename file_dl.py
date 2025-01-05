@@ -73,3 +73,6 @@ def run_dl():
 
         # Download and save the file
         download_file(download_url, save_path)
+        
+directory_url = "https://pubfiles.pagasa.dost.gov.ph/tamss/weather/weather_advisory/"
+latest_file = get_latest_file_by_date(directory_url)
