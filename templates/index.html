@@ -297,7 +297,6 @@
 
 				// Fetch new images only when the UTC minute is divisible by 10
 				if (currentMinute % 10 === 0 && currentMinute !== lastFetchMinute) {
-					print('Checking for new images.\n')
 					lastFetchMinute = currentMinute;
 					await fetchSatelliteImages();
 				}
