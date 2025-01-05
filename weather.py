@@ -20,7 +20,7 @@ SATELLITE_IMAGES_DIR = "static/satellite_images"
 os.makedirs(SATELLITE_IMAGES_DIR, exist_ok=True)  # Ensure directory exists
 
 # Weather API and PAGASA settings
-WEATHER_API_KEY = ""
+WEATHER_API_KEY = "d3fa937c2fb167613c83a82b7324c32d"
 WEATHER_API_URL = "https://api.openweathermap.org/data/2.5/onecall"
 PAGASA_ALERTS_URL = "https://www.pagasa.dost.gov.ph/"
 
