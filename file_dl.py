@@ -50,10 +50,6 @@ def download_file(url, save_path):
         file.write(response.content)
     print(f"File downloaded and saved as {save_path}")
 
-# Example usage
-directory_url = "https://pubfiles.pagasa.dost.gov.ph/tamss/weather/weather_advisory/"
-latest_file = get_latest_file_by_date(directory_url)
-
 def run_dl():
     if isinstance(latest_file, str):
         print(latest_file)  # If no files found, latest_file will contain an error message
