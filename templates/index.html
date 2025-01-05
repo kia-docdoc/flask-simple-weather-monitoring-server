@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Philippine Weather Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+		:root {
+            --bg-color: linear-gradient(120deg, #eef2f3, #f8f9fa);
+            --text-color: #333;
+			--btn-color: #fff;
+            --card-bg: #fff;
+            --input-bg: #fff;
+            --btn-bg: linear-gradient(90deg, #6a11cb, #2575fc);
+            --clock-gradient: linear-gradient(90deg, #2575fc, #6a11cb);
+            --modal-bg: #fff;
+			--href-color: linear-gradient(90deg, #2575fc, #6a11cb);
+        }
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #eeeee4;
+			--btn-color: #eeeee4;
+            --card-bg: #1e1e1e;
+            --input-bg: #eeeee4;
+            --btn-bg: linear-gradient(90deg, #ff8c00, #ff0080);
+            --clock-gradient: linear-gradient(90deg, #ff0080, #ff8c00);
+            --modal-bg: #333;
+			--href-color: linear-gradient(90deg, #ff0080, #ff8c00);
+        }
+		.web-link {
+			background: var(--href-color); /* Default color for links */
+			-webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+			transition: color 0.3s ease; /* Smooth color change on hover */
+		}
+		[data-theme="dark"] .web-link {
+			background: var(--href-color); /* Link color in dark mode */
+			-webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+		}
+        body {
+            background: var(--bg-color);
+            font-family: 'Poppins', sans-serif;
+			color: #333;
+        }
+		h1, h2, h4 {
+            color: var(--text-color);
+        }
+		.title-gradient {
+			font-size: 2.5rem;
+			font-weight: bold;
+			background: var(--clock-gradient);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+		}
+        .weather-card {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            background: var(--card-bg);
+            padding: 20px;
+            transition: transform 0.2s;
+			color: var(--text-color);
+        }
+		.input-group .form-control {
+			background: var(--input-bg);
+            border-radius: 15px 0 0 15px;
+			color: #333;
+        }
+		.input-group .btn {
+            border-radius: 0 15px 15px 0;
+            background: var(--btn-bg);
+            color: var(--btn-color);
+            font-weight: bold;
+        }
+        .satellite-img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+		.clock {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .clock-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            align-items: center;
+        }
+        .clock-item,
+        .zone {
+            font-size: 1.5rem;
+            font-size: 1.5rem;
+            background: var(--clock-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 0px;
+        }
+        .zone {
+            font-size: 1rem;
+            font-weight: normal;
+            color: #6c757d;
+        }
+        .clock-separator {
+            font-size: 1.5rem;
+            background: var(--clock-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 10px;
+        }
+		.clock-label {
+            font-size: 1.5rem;
+            background: var(--clock-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 0px;
+        }
+		.modal-content {
+            background: var(--modal-bg);
+            color: var(--text-color);
+        }
+		
+		@media (min-width: 992px) {
+            .weather-card {
+                height: 100%; /* Ensure consistent height for alignment */
+            }
+            .satellite-img {
+                height: auto;
+                max-height: 300px; /* Adjust as needed to match design */
+            }
+        }
+		.dark-mode-toggle {
+			position: absolute;
+			top: 15px;
+			right: 15px;
+			background: var(--btn-bg);
+			color: var(--btn-color);
+			border: none;
+			border-radius: 50%;
+			width: 45px; /* Set a fixed width */
+			height: 45px; /* Set a fixed height */
+			padding: 0; /* Remove padding to maintain perfect circle */
+			padding: 8px 12px;
+			cursor: pointer;
+			font-weight: bold;
+			font-size: 0.8rem;
+			z-index: 1000;
+			transition: all 0.3s ease;
+		}
+		@media (max-width: 576px) { /* Small screens (e.g., phones) */
+			.dark-mode-toggle {
+				border-radius: 50%;
+				width: 35px; /* Set a fixed width */
+				height: 35px; /* Set a fixed height */
+				top: 7px;
+				right: 10px;
+				padding: 6px 10px;
+				font-size: 0.6rem;
+			}
+			.title-gradient {
+				font-size: 2rem;
+			}
+			.clock-label {
+				font-size: 1rem;
+			}
+			.clock-item {
+				font-size: 1rem;
+			}
+
+		@media (max-width: 768px) { /* Medium screens (e.g., tablets) */
+			.dark-mode-toggle {
+				border-radius: 50%;
+				width: 35px; /* Set a fixed width */
+				height: 35px; /* Set a fixed height */
+				top: 10px;
+				right: 15px;
+				font-size: 0.6rem;
+			}
+		}
+    </style>
+</head>
+<body>
+	<button class="dark-mode-toggle" id="darkModeToggle">Dark Mode</button>
+    <div class="container py-5">
+        <h1 class="text-center mb-4 title-gradient">Philippine Weather Dashboard</h1>
+		
+		 <!-- Clock -->
+        <div class="clock">
+            <div class="clock-container">
+				<div class="clock-label" id="utc">PST</div>
+                <div class="clock-item" id="pst-time">Loading...</div>
+                <div class="clock-separator">|</div>
+				<div class="clock-label" id="utc">UTC</div>
+                <div class="clock-item" id="utc-time">Loading...</div>
+            </div>
+        </div>
+
+        <!-- City Selection -->
+        <form action="/pin" method="post" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="city" class="form-control" placeholder="Enter city (e.g., Manila)" required>
+                <button type="submit" class="btn">Pin City</button>
+            </div>
+        </form>
+
+        <!-- Weather Information and Satellite Display -->
+        <div class="row mb-4">
+            <!-- Weather Information -->
+            <div class="col-lg-6 col-md-12 mb-3">
+                <div class="weather-card p-4">
+                    {% if weather_data %}
+                        <h2>{{ city }}</h2>
+                        <p><strong>Temperature:</strong> <span id="weather-temperature">{{ weather_data['current']['main']['temp'] }} °C</span></p>
+                        <p><strong>Wind:</strong> <span id="weather-wind">{{ weather_data['current']['wind']['speed'] }} m/s</span></p>
+                        <p><strong>Rain:</strong> <span id="weather-rain">{{ weather_data['current'].get('rain', {}).get('1h', 0) }} mm (last hour)</span></p>
+
+                        <h4>Future Forecast</h4>
+                        <ul id="weather-forecast">
+                            {% for forecast in weather_data['forecast']['list'][:5] %}
+                                <li>
+                                    {{ forecast['dt'] | datetimeformat('%Y-%m-%d | %I:%M %p') }} |  
+                                    {{ forecast['main']['temp'] }} &deg;C, {{ forecast['weather'][0]['description'] }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>Weather data unavailable. Please try again later.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Satellite Image -->
+            <div class="col-lg-6 col-md-12 mb-3">
+                <div class="weather-card p-4">
+					<h4>Himawari Weather Satellite</h4>
+					<img id="satellite-img" src="{{ satellite_url }}" alt="Himawari Weather Satellite" class="satellite-img" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#imageModal">
+				</div>
+            </div>
+        </div>
+		
+		<!-- Add Bootstrap Modal for Image Zoom -->
+		<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="imageModalLabel">Himawari Weather Satellite</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<img id="zoomed-satellite-img" src="" alt="Zoomed Satellite Image" class="img-fluid rounded">
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<script>
+			// Event listener to load the satellite image into the modal
+			document.getElementById('satellite-img').addEventListener('click', function () {
+				const modalImage = document.getElementById('zoomed-satellite-img');
+				modalImage.src = this.src; // Use the same image source
+			});
+		</script>
+		
+		<script>
+			// Fetch satellite images
+			const satelliteImg = document.getElementById('satellite-img');
+			const zoomedSatelliteImg = document.getElementById('zoomed-satellite-img');
+			let currentImageIndex = 0;
+			let cachedImages = [];
+			let lastFetchMinute = -1;
+
+			const fetchSatelliteImages = async () => {
+				try {
+					const response = await fetch('/api/satellite-images');
+					if (!response.ok) throw new Error("Failed to fetch satellite images");
+					const data = await response.json();
+					cachedImages = data.images.map((img) => `${img}?t=${Date.now()}`);
+				} catch (error) {
+					console.error("Error fetching satellite images:", error);
+				}
+			};
+
+			const updateSatelliteImage = () => {
+				if (cachedImages.length > 0) {
+					satelliteImg.src = cachedImages[5 - currentImageIndex];
+					zoomedSatelliteImg.src = cachedImages[5 - currentImageIndex];
+					currentImageIndex = (currentImageIndex + 1) % cachedImages.length;
+				}
+			};
+
+			const checkAndFetchImages = async () => {
+				const now = new Date();
+				const currentMinute = now.getUTCMinutes();
+
+				// Fetch new images only when the UTC minute is divisible by 10
+				if (currentMinute % 10 === 0 && currentMinute !== lastFetchMinute) {
+					print('Checking for new images.\n')
+					lastFetchMinute = currentMinute;
+					await fetchSatelliteImages();
+				}
+			};
+
+			// Initial fetch and start the image rotation
+			fetchSatelliteImages();
+			setInterval(updateSatelliteImage, 1000); // Update the image every second
+			setInterval(checkAndFetchImages, 120000); // Check for new images every minute
+
+			// Sync modal image with the main image
+			document.getElementById('imageModal').addEventListener('shown.bs.modal', () => {
+				zoomedSatelliteImg.src = satelliteImg.src;
+			});
+		</script>
+		
+		<script>
+			// Store scroll position before page reload
+			window.addEventListener('beforeunload', () => {
+				sessionStorage.setItem('scrollPosition', window.scrollY);
+			});
+
+			// Restore scroll position after page reload
+			window.addEventListener('load', () => {
+				const scrollPosition = sessionStorage.getItem('scrollPosition');
+				if (scrollPosition) {
+					window.scrollTo(0, parseInt(scrollPosition, 10));
+					sessionStorage.removeItem('scrollPosition'); // Optional: Remove after restoring
+				}
+			});
+
+			// Automatically refresh the page every 5 minutes (300,000 ms)
+			setTimeout(() => {
+				sessionStorage.setItem('scrollPosition', window.scrollY); // Save scroll position
+				location.reload(); // Reload the page
+			}, 300000); // 300,000 ms = 5 minutes
+		</script>
+		
+		<script>
+			const updateWeatherInfo = async () => {
+				const city = "{{ city }}"; // Get the current city from the server-side context
+				try {
+					const response = await fetch(`/api/weather?city=${encodeURIComponent(city)}`);
+					if (!response.ok) throw new Error("Failed to fetch weather data");
+
+					const data = await response.json();
+
+					// Update the weather information in the DOM
+					document.getElementById('weather-temperature').innerText = `${data.current.main.temp} °C`;
+					document.getElementById('weather-wind').innerText = `${data.current.wind.speed} m/s`;
+					document.getElementById('weather-rain').innerText = `${data.current.rain?.['1h'] || 0} mm (last hour)`;
+
+					const forecastList = document.getElementById('weather-forecast');
+					forecastList.innerHTML = ""; // Clear old forecast data
+					data.forecast.list.slice(0, 5).forEach(forecast => {
+						const forecastItem = document.createElement('li');
+						const forecastDate = new Date(forecast.dt * 1000);
+						const formattedDate = forecastDate.toLocaleDateString('en-US', {
+							year: 'numeric',
+							month: 'short',
+							day: 'numeric',
+						});
+						const formattedTime = forecastDate.toLocaleTimeString('en-US', {
+							hour: '2-digit',
+							minute: '2-digit',
+							hour12: true,
+						});
+						forecastItem.innerText = `${formattedDate} | ${formattedTime} - ${forecast.main.temp} °C, ${forecast.weather[0].description}`;
+						forecastList.appendChild(forecastItem);
+					});
+				} catch (error) {
+					console.error("Error updating weather information:", error);
+				}
+			};
+
+			// Update weather information every 5 minutes
+			setInterval(updateWeatherInfo, 5 * 60 * 1000);
+			updateWeatherInfo(); // Initial fetch
+		</script>
+		
+		<script>
+			const updateClocks = async () => {
+				const now = new Date();
+
+				// Philippine Standard Time (PST)
+				const pstTime = new Date(now.getTime() + now.getTimezoneOffset() * 60000 + 8 * 3600000);
+				document.getElementById('pst-time').textContent = pstTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+				// Coordinated Universal Time (UTC)
+				document.getElementById('utc-time').textContent = now.toUTCString().split(' ')[4];
+			};
+
+			// Update clocks every second
+			setInterval(updateClocks, 1000);
+			updateClocks();
+		</script>
+		
+		<script>
+            // Dark mode toggle functionality
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const currentTheme = localStorage.getItem('theme') || 'light';
+
+            document.body.dataset.theme = currentTheme;
+
+            darkModeToggle.textContent = currentTheme === 'dark' ? 'LM' : 'DM';
+
+            darkModeToggle.addEventListener('click', () => {
+                const newTheme = document.body.dataset.theme === 'light' ? 'dark' : 'light';
+                document.body.dataset.theme = newTheme;
+                localStorage.setItem('theme', newTheme);
+                darkModeToggle.textContent = newTheme === 'dark' ? 'LM' : 'DM';
+            });
+        </script>
+
+        <!-- PAGASA Alerts -->
+		<div class="weather-card p-4">
+			<h4>PAGASA Advisory</h4>
+			<p>View advisory archive <a href="https://pubfiles.pagasa.dost.gov.ph/tamss/weather/weather_advisory/" class="web-link">here</a>.</p>
+			<iframe 
+				src="/pagasa_alert/advisory" 
+				loading="lazy"
+				width="100%" 
+				height="500px" 
+				style="border: none; margin-top: 10px;">
+			</iframe>
+		</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
