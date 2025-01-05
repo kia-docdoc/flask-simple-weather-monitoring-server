@@ -9,7 +9,6 @@ from datetime import datetime, timedelta, timezone
 from bs4 import BeautifulSoup
 from pytz import timezone as ptz
 from apscheduler.schedulers.background import BackgroundScheduler
-from threading import Lock
 
 app = Flask(__name__)
 
