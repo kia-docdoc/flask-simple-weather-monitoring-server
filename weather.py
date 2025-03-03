@@ -124,7 +124,7 @@ def get_satellite_images():
  
 @app.route('/')
 def index():
-    city = request.args.get('city', 'Ozamiz')
+    city = request.args.get('city', 'Manila')
     weather_data = get_weather_data(city)
     
     # Check for Cloudflare's CF-Connecting-IP header first
@@ -153,7 +153,7 @@ def pin_city():
     
 @app.route('/api/weather')
 def get_weather_data_api():
-    city = request.args.get('city', 'Ozamiz')  # Default to Manila if no city is provided
+    city = request.args.get('city', 'Manila')  # Default to Manila if no city is provided
     weather_data = get_weather_data(city)
     if weather_data:
         return jsonify(weather_data)
